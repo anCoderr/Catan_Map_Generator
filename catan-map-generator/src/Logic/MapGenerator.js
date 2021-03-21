@@ -9,17 +9,29 @@ const mapGenerator = () => {
         arrayShuffler(indexArray);
         arrayShuffler(resourceArray);
         arrayShuffler(numberArray);
-        let indexIndex = getRandomIndex(indexArray.length);
-        let resourceIndex = getRandomIndex(indexArray.length);
-        let numberIndex = getRandomIndex(indexArray.length);
-        mapData.push({
-            index: indexArray[indexIndex],
-            resource: resourceArray[resourceIndex],
-            number: numberArray[numberIndex],
-        });
-        delete indexArray[indexIndex];
-        delete resourceArray[resourceIndex];
-        delete numberArray[numberIndex];
+        
+        let indexIndex = getRandomIndex(indexArray.length-1);
+        let resourceIndex = getRandomIndex(resourceArray.length-1);
+        let numberIndex = getRandomIndex(numberArray.length-1);
+        
+        if(resourceArray[resourceIndex] === 'D') {
+            mapData.push({
+                index: indexArray[indexIndex],
+                resource: resourceArray[resourceIndex],
+                number: 7,
+            });
+            indexArray.splice(indexIndex, 1);
+            resourceArray.splice(resourceIndex, 1);
+        } else {
+            mapData.push({
+                index: indexArray[indexIndex],
+                resource: resourceArray[resourceIndex],
+                number: numberArray[numberIndex],
+            });
+            indexArray.splice(indexIndex, 1);
+            resourceArray.splice(resourceIndex, 1);
+            numberArray.splice(numberIndex, 1);
+        }
     }
     return mapData;
 }
