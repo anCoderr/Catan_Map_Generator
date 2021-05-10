@@ -1,0 +1,1 @@
+export const ADD_MAP_OBJECT = 'ADD_MAP_OBJECT';

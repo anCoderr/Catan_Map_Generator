@@ -36,6 +36,7 @@ const mapGenerator = () => {
     return mapData;
 }
 
+
 const getRandomIndex = (max) => {
     return Math.floor(Math.random()*(max+1));
 }

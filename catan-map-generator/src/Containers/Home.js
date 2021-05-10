@@ -1,23 +1,40 @@
-import React, { useEffect} from 'react';
+import React from 'react';
 import mapGenerator from '../Logic/MapGenerator';
-import MapTile from '../Components/MapTile';
+import Board from './Board';
+import { connect } from 'react-redux';
+import * as actions from '../store/actions/actions'
 
 const Home = props => {
-    let mapData = mapGenerator();
+    const onGenerateClickHandler = () => {
+        let mapData = mapGenerator();
+        props.onAddMapObject(mapData);
+    }
     
     return (
         <div>
-            <MapTile/>
-            Hey it works;
-            {mapData.map(object => {
+            <button onClick={onGenerateClickHandler}>Generate Map</button>
+            {props.mapObject ? props.mapObject.map(object => {
                 return (
-                    <div>
+                    <div key={object.index}>
                         <p>{object.index + ' ' +  object.resource + ' ' + object.number}</p>
                     </div>
                 );
-            })}
+            }) : null}
+            <Board/>
         </div>
     );
 }
 
-export default Home;
+const mapStateToProps = (state) => {
+    return {
+        mapObject: state.mapObject,
+    }
+}
+
+const mapDispatchToProps = (dispatch) => {
+    return {
+        onAddMapObject: (mapObject) => dispatch(actions.addMapObject(mapObject))
+    };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(Home);
