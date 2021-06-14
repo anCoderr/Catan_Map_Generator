@@ -1,24 +1,22 @@
 import React, {useRef, useEffect} from 'react';
 import { connect } from 'react-redux';
 
-import clayImage from '../assets/images/Main/clay.png';
-import hayImage from "../assets/images/Main/hay.png";
-import pastureImage from "../assets/images/Main/pasture.png";
-import stoneImage from "../assets/images/Main/stone.png";
-import forestImage from "../assets/images/Main/forest.png";
-import desertImage from "../assets/images/Main/desert.png";
-import oceanImage from "../assets/images/Main/water.png";
+import clayImage from '../assets/images/MapTileIcons/clay.png';
+import hayImage from "../assets/images/MapTileIcons/hay.png";
+import pastureImage from "../assets/images/MapTileIcons/pasture.png";
+import stoneImage from "../assets/images/MapTileIcons/stone.png";
+import forestImage from "../assets/images/MapTileIcons/forest.png";
+import desertImage from "../assets/images/MapTileIcons/desert.png";
+import oceanImage from "../assets/images/MapTileIcons/water.png";
 
 import styles from './Canvas.module.css';
 
 const Canvas = (props) => {    
     const canvasRef = useRef();
-
     useEffect(() => {
         const canvas = canvasRef.current;
         const context = canvas.getContext('2d');
         window.addEventListener('load', canvasDrawing(canvas, context, props.mapObject));
-    
     }, [props.mapObject]);
     
     return (
