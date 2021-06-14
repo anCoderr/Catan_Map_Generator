@@ -36,7 +36,6 @@ const Canvas = (props) => {
     );
 }
 const canvasDrawing = (canvas, context, mapObject) => {
-        console.log("BOom done");
         canvas.width = window.innerHeight;
         canvas.height = window.innerHeight;
         context.imageSmoothingEnabled = true;
@@ -149,27 +148,27 @@ const canvasDrawing = (canvas, context, mapObject) => {
             context.closePath();
         }
 
-        const hexagonalTileDraw = (centerCord, size, index) => {
+        const hexagonalTileDraw = (tileCenterCord, size, index) => {
             context.beginPath();
-            context.moveTo(-size/2 + centerCord[0], factor*size + centerCord[1]);
-            context.lineTo(-size + centerCord[0], centerCord[1]);
-            context.lineTo(-size/2 + centerCord[0], -factor*size + centerCord[1]);
-            context.lineTo(size/2 + centerCord[0], -factor*size + centerCord[1]);
-            context.lineTo(size + centerCord[0], centerCord[1]);
-            context.lineTo(size/2 + centerCord[0], factor*size + centerCord[1]);
+            context.moveTo(-size/2 + tileCenterCord[0], factor*size + tileCenterCord[1]);
+            context.lineTo(-size + tileCenterCord[0], tileCenterCord[1]);
+            context.lineTo(-size/2 + tileCenterCord[0], -factor*size + tileCenterCord[1]);
+            context.lineTo(size/2 + tileCenterCord[0], -factor*size + tileCenterCord[1]);
+            context.lineTo(size + tileCenterCord[0], tileCenterCord[1]);
+            context.lineTo(size/2 + tileCenterCord[0], factor*size + tileCenterCord[1]);
             context.closePath();
             context.stroke();
-            drawOnTile(index, centerCord[0], centerCord[1]);
+            drawOnTile(index, tileCenterCord[0], tileCenterCord[1]);
         }
 
-        const hexDraw = (centerCord, size) => {
+        const hexDraw = (tileCenterCord, size) => {
             context.beginPath();
-            context.moveTo(-size/2 + centerCord[0], factor*size + centerCord[1]);
-            context.lineTo(-size + centerCord[0], centerCord[1]);
-            context.lineTo(-size/2 + centerCord[0], -factor*size + centerCord[1]);
-            context.lineTo(size/2 + centerCord[0], -factor*size + centerCord[1]);
-            context.lineTo(size + centerCord[0], centerCord[1]);
-            context.lineTo(size/2 + centerCord[0], factor*size + centerCord[1]);
+            context.moveTo(-size/2 + tileCenterCord[0], factor*size + tileCenterCord[1]);
+            context.lineTo(-size + tileCenterCord[0], tileCenterCord[1]);
+            context.lineTo(-size/2 + tileCenterCord[0], -factor*size + tileCenterCord[1]);
+            context.lineTo(size/2 + tileCenterCord[0], -factor*size + tileCenterCord[1]);
+            context.lineTo(size + tileCenterCord[0], tileCenterCord[1]);
+            context.lineTo(size/2 + tileCenterCord[0], factor*size + tileCenterCord[1]);
             context.closePath();
             context.fillStyle = "SaddleBrown";
             context.fill();
