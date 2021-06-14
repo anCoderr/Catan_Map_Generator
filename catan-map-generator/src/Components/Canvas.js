@@ -1,13 +1,13 @@
 import React, {useRef, useEffect} from 'react';
 import { connect } from 'react-redux';
 
-import clayImage from '../assets/images/MapTileIcons/clay.png';
-import hayImage from "../assets/images/MapTileIcons/hay.png";
-import pastureImage from "../assets/images/MapTileIcons/pasture.png";
-import stoneImage from "../assets/images/MapTileIcons/stone.png";
-import forestImage from "../assets/images/MapTileIcons/forest.png";
-import desertImage from "../assets/images/MapTileIcons/desert.png";
-import oceanImage from "../assets/images/MapTileIcons/water.png";
+import clayImage from '../assets/MapTileIcons/clay.png';
+import hayImage from "../assets/MapTileIcons/hay.png";
+import pastureImage from "../assets/MapTileIcons/pasture.png";
+import stoneImage from "../assets/MapTileIcons/stone.png";
+import forestImage from "../assets/MapTileIcons/forest.png";
+import desertImage from "../assets/MapTileIcons/desert.png";
+import oceanImage from "../assets/MapTileIcons/water.png";
 
 import styles from './Canvas.module.css';
 
