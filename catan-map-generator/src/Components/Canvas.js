@@ -36,12 +36,13 @@ const Canvas = (props) => {
     );
 }
 const canvasDrawing = (canvas, context, mapObject) => {
+        console.log("BOom done");
         canvas.width = window.innerHeight;
         canvas.height = window.innerHeight;
         context.imageSmoothingEnabled = true;
         context.strokeStyle = "black";
         context.clearRect(0, 0, canvas.width, canvas.height);
-        
+
         let loadCount = 0, errorCount = 0;
         const targetCount = 6;
         
@@ -50,20 +51,6 @@ const canvasDrawing = (canvas, context, mapObject) => {
         const size = canvas.height/12;
         const distY = (2*factor*size+padding)/2;
         const distX = (3*size + factor*2*padding)/2;
-        
-        const dp = (4*factor*padding)/2;
-
-        const d0 = size/2 + dp;
-        const d1 = size + dp;
-        const d2 = distX + dp + size/2;
-        const d3 = distX + dp + size;
-        const d4 = 2*distX + dp + size/2;
-        const d5 = 2*distX + dp + size;
-        const d6 = 5*distY + padding/2;
-        const d7 = 4*distY + padding/2;
-        const d8 = 3*distY + padding/2;
-        const d9 = 2*distY + padding/2;
-        const d10 = distY + padding/2; 
 
         const boardSize = canvas.height/2;
         const d = (canvas.width - 2*factor*boardSize)/2;
@@ -71,6 +58,28 @@ const canvasDrawing = (canvas, context, mapObject) => {
 
         const absoluteCenterX = canvas.width/2;
         const absoluteCenterY = canvas.height/2;
+
+        const tileCoordinates = [
+            [absoluteCenterX - 2*distX, absoluteCenterY + 2*distY],
+            [absoluteCenterX - 2*distX, absoluteCenterY],
+            [absoluteCenterX - 2*distX, absoluteCenterY - 2*distY],
+            [absoluteCenterX - distX, absoluteCenterY + 3*distY],
+            [absoluteCenterX - distX, absoluteCenterY + distY],
+            [absoluteCenterX - distX, absoluteCenterY - distY],
+            [absoluteCenterX - distX, absoluteCenterY - 3*distY],
+            [absoluteCenterX, absoluteCenterY + 4*distY],
+            [absoluteCenterX, absoluteCenterY + 2*distY],
+            [absoluteCenterX, absoluteCenterY],
+            [absoluteCenterX, absoluteCenterY - 2*distY],
+            [absoluteCenterX, absoluteCenterY - 4*distY],
+            [absoluteCenterX + distX, absoluteCenterY + 3*distY],
+            [absoluteCenterX + distX, absoluteCenterY + distY],
+            [absoluteCenterX + distX, absoluteCenterY - distY],
+            [absoluteCenterX + distX, absoluteCenterY - 3*distY],
+            [absoluteCenterX + 2*distX, absoluteCenterY + 2*distY],
+            [absoluteCenterX + 2*distX, absoluteCenterY],
+            [absoluteCenterX + 2*distX, absoluteCenterY - 2*distY],
+        ]
 
         let imageName;
         let probabilityNumber = 0;
@@ -82,7 +91,6 @@ const canvasDrawing = (canvas, context, mapObject) => {
         let imageTree = document.getElementById("forest");
         let imageDesert = document.getElementById("desert");
         let imageOcean = document.getElementById("ocean");
-
 
         let imagesArray = {imageClay, imageHay, imagePasture, imageStone, imageTree, imageOcean};
 
@@ -133,7 +141,7 @@ const canvasDrawing = (canvas, context, mapObject) => {
             context.arc(centerX, centerY, radiusBig, 0, 2 * Math.PI);
             context.fill();
             context.closePath();
-            
+        
             context.fillStyle = "white";
             context.beginPath();
             context.arc(centerX, centerY, radiusSmall, 0, 2 * Math.PI);
@@ -141,21 +149,32 @@ const canvasDrawing = (canvas, context, mapObject) => {
             context.closePath();
         }
 
-        const hexDraw = (centerX, centerY, size, index) => {
+        const hexagonalTileDraw = (centerCord, size, index) => {
             context.beginPath();
-            context.moveTo(-size/2 + centerX, factor*size + centerY);
-            context.lineTo(-size + centerX, centerY);
-            context.lineTo(-size/2 + centerX, -factor*size + centerY);
-            context.lineTo(size/2 + centerX, -factor*size + centerY);
-            context.lineTo(size + centerX, centerY);
-            context.lineTo(size/2 + centerX, factor*size + centerY);
+            context.moveTo(-size/2 + centerCord[0], factor*size + centerCord[1]);
+            context.lineTo(-size + centerCord[0], centerCord[1]);
+            context.lineTo(-size/2 + centerCord[0], -factor*size + centerCord[1]);
+            context.lineTo(size/2 + centerCord[0], -factor*size + centerCord[1]);
+            context.lineTo(size + centerCord[0], centerCord[1]);
+            context.lineTo(size/2 + centerCord[0], factor*size + centerCord[1]);
             context.closePath();
             context.stroke();
-            drawOnTile(index, centerX, centerY);
+            drawOnTile(index, centerCord[0], centerCord[1]);
         }
 
+        const hexDraw = (centerCord, size) => {
+            context.beginPath();
+            context.moveTo(-size/2 + centerCord[0], factor*size + centerCord[1]);
+            context.lineTo(-size + centerCord[0], centerCord[1]);
+            context.lineTo(-size/2 + centerCord[0], -factor*size + centerCord[1]);
+            context.lineTo(size/2 + centerCord[0], -factor*size + centerCord[1]);
+            context.lineTo(size + centerCord[0], centerCord[1]);
+            context.lineTo(size/2 + centerCord[0], factor*size + centerCord[1]);
+            context.closePath();
+            context.fillStyle = "SaddleBrown";
+            context.fill();
+        }
         const waterDraw = () => {
-            console.log('Boom', canvas.width, canvas.height, d, t);
             context.beginPath();
             context.moveTo(canvas.width/2, 0);
             context.lineTo(d, t);
@@ -164,106 +183,40 @@ const canvasDrawing = (canvas, context, mapObject) => {
             context.lineTo(canvas.width-d, canvas.height-t);
             context.lineTo(canvas.width-d, t);
             context.lineTo(canvas.width/2, 0);
-            // context.drawImage(imageOcean, d, 0, canvas.width - d,canvas.height)
             context.fillStyle = "Navy";
             context.fill();
             context.stroke();
         }
-
         const landDraw = () => {
-            context.beginPath();
-            context.moveTo(absoluteCenterX - d0, absoluteCenterY - d6);
-            context.lineTo(absoluteCenterX - d1, absoluteCenterY - d7);
-            context.lineTo(absoluteCenterX - d2, absoluteCenterY - d7);
-            context.lineTo(absoluteCenterX - d3, absoluteCenterY - d8);
-            context.lineTo(absoluteCenterX - d4, absoluteCenterY - d8);
-            context.lineTo(absoluteCenterX - d5, absoluteCenterY - d9);
-            context.lineTo(absoluteCenterX - d4, absoluteCenterY - d10);
-            context.lineTo(absoluteCenterX - d5, absoluteCenterY);
-            context.lineTo(absoluteCenterX - d4, absoluteCenterY + d10);
-            context.lineTo(absoluteCenterX - d5, absoluteCenterY + d9);
-            context.lineTo(absoluteCenterX - d4, absoluteCenterY + d8);
-            context.lineTo(absoluteCenterX - d3, absoluteCenterY + d8);
-            context.lineTo(absoluteCenterX - d2, absoluteCenterY + d7);
-            context.lineTo(absoluteCenterX - d1, absoluteCenterY + d7);
-            context.lineTo(absoluteCenterX - d0, absoluteCenterY + d6);
-            context.lineTo(absoluteCenterX + d0, absoluteCenterY + d6);
-            context.lineTo(absoluteCenterX + d1, absoluteCenterY + d7);
-            context.lineTo(absoluteCenterX + d2, absoluteCenterY + d7);
-            context.lineTo(absoluteCenterX + d3, absoluteCenterY + d8);
-            context.lineTo(absoluteCenterX + d4, absoluteCenterY + d8);
-            context.lineTo(absoluteCenterX + d5, absoluteCenterY + d9);
-            context.lineTo(absoluteCenterX + d4, absoluteCenterY + d10);
-            context.lineTo(absoluteCenterX + d5, absoluteCenterY);
-            context.lineTo(absoluteCenterX + d4, absoluteCenterY - d10);
-            context.lineTo(absoluteCenterX + d5, absoluteCenterY - d9);
-            context.lineTo(absoluteCenterX + d4, absoluteCenterY - d8);
-            context.lineTo(absoluteCenterX + d3, absoluteCenterY - d8);
-            context.lineTo(absoluteCenterX + d2, absoluteCenterY - d7);
-            context.lineTo(absoluteCenterX + d1, absoluteCenterY - d7);
-            context.lineTo(absoluteCenterX + d0, absoluteCenterY - d6);
-            context.lineTo(absoluteCenterX - d0, absoluteCenterY - d6);
-            context.fillStyle = "SaddleBrown";
-            context.fill();
-            context.stroke();
+            for(let i = 0; i<19; i++) 
+                hexDraw(tileCoordinates[i], size+padding);
         }
-
-        const col1Draw = () => {
-            hexDraw(absoluteCenterX - 2*distX, absoluteCenterY + 2*distY, size, 0);
-            hexDraw(absoluteCenterX - 2*distX, absoluteCenterY, size, 1);
-            hexDraw(absoluteCenterX - 2*distX, absoluteCenterY - 2*distY, size, 2);
-        };
-        const col2Draw = () => {
-            hexDraw(absoluteCenterX - distX, absoluteCenterY + 3*distY, size, 3);
-            hexDraw(absoluteCenterX - distX, absoluteCenterY + distY, size, 4);
-            hexDraw(absoluteCenterX - distX, absoluteCenterY - distY, size, 5);
-            hexDraw(absoluteCenterX - distX, absoluteCenterY - 3*distY, size, 6);
-        };
-        const col3Draw = () => {
-            hexDraw(absoluteCenterX, absoluteCenterY + 4*distY, size, 7);
-            hexDraw(absoluteCenterX, absoluteCenterY + 2*distY, size, 8);
-            hexDraw(absoluteCenterX, absoluteCenterY, size, 9);
-            hexDraw(absoluteCenterX, absoluteCenterY - 2*distY, size, 10);
-            hexDraw(absoluteCenterX, absoluteCenterY - 4*distY, size, 11);
-        };
-        const col4Draw = () => {
-            hexDraw(absoluteCenterX + distX, absoluteCenterY + 3*distY, size, 12);
-            hexDraw(absoluteCenterX + distX, absoluteCenterY + distY, size, 13);
-            hexDraw(absoluteCenterX + distX, absoluteCenterY - distY, size, 14);
-            hexDraw(absoluteCenterX + distX, absoluteCenterY - 3*distY, size, 15);
-        };
-        const col5Draw = () => {
-            hexDraw(absoluteCenterX + 2*distX, absoluteCenterY + 2*distY, size, 16);
-            hexDraw(absoluteCenterX + 2*distX, absoluteCenterY, size, 17);
-            hexDraw(absoluteCenterX + 2*distX, absoluteCenterY - 2*distY, size, 18);
-        };
-        const mapDraw = () => {
-            col1Draw();
-            col2Draw();
-            col3Draw();
-            col4Draw();
-            col5Draw();
-        };
+        
+        const tileDraw = () => {
+            for(let i = 0; i<19; i++)
+                hexagonalTileDraw(tileCoordinates[i], size, i);
+        }
+        
         const imageLoader = () => {
-            const checkAllLoaded = function() {
+            const checkAllLoaded = () => {
                 if (loadCount + errorCount === targetCount) {
                     waterDraw();
                     landDraw();
-                    mapDraw();
+                    tileDraw();
                 }
             };
-            const onloadImage = function() {
+            const onloadImage = () => {
                 loadCount++;
                 checkAllLoaded();
             };
-            const onErrorImage = function() {
+            const onErrorImage = () => {
                 errorCount++;
                 checkAllLoaded();
             }; 
             const loadImages = () => {
                 if(loadCount + errorCount >= targetCount) {
                     landDraw();
-                    mapDraw();
+                    tileDraw();
                 } else {
                     for (var i = 0; i < targetCount; i++) {
                         var img = new Image();
@@ -275,6 +228,7 @@ const canvasDrawing = (canvas, context, mapObject) => {
             };
             loadImages();
         };
+
         if(mapObject) {
             imageLoader();
         }

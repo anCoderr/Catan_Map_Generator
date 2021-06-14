@@ -13,13 +13,6 @@ const Home = props => {
     return (
         <div>
             <button onClick={onGenerateClickHandler}>Generate Map</button>
-            {props.mapObject ? props.mapObject.map(object => {
-                return (
-                    <div key={object.index}>
-                        <p>{object.index + ' ' +  object.resource + ' ' + object.number}</p>
-                    </div>
-                );
-            }) : null}
             <Board/>
         </div>
     );
